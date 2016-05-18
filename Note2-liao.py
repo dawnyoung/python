@@ -240,3 +240,46 @@ print(sorted(l, key = lambda l2:l2[1], reverse = True))
 # return function
 ###############################################################################
 
+# Closure
+# A function returns a function. 
+# Parameters and variables are saved in the returned fucntion.
+
+def lazy_sum(*x):
+    def mysum():
+        ms = 0
+        for i in x:
+            ms = ms + i
+        return ms
+    return mysum
+
+print(lazy_sum(1,2,3,4)) #return a function
+
+f = lazy_sum(1,2,3,4)
+print(f) # return a function
+"the function will be executed when f is called"
+print(f())
+
+f2 = lazy_sum(1,2,3,4)
+print(f == f2) # f is different from f2 even with the same function and same input
+#%%
+
+###############################################################################
+#  lambda
+###############################################################################
+
+list(map(lambda x:x*x, [1,2,3]))
+#%%
+
+# lambda can be used as returned value
+def sumofsquare(x, y):
+    return lambda: x*x + y*y
+print(sumofsquare(1,2)) # return a fucntion
+
+f = lambda x, y: x*x + y*y
+print(f) # f is a function
+#%%
+
+###############################################################################
+# decorator
+###############################################################################
+
