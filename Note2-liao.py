@@ -130,3 +130,113 @@ fib(6)
 # Functional programming
 #-----------------------------------------------------------------------------------------------
 # http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819866394c3f9efcd1a454b2a8c57933e976445c0000
+
+
+###############################################################################
+# Higher order function
+###############################################################################
+
+###################   map() &  reduce()
+
+# map(function, list)
+# works on each element in the list respectively
+def f(x):
+    return x*x
+list(map(f, [1,2,3,4])) # put the result of map into a list
+#%%
+
+tuple(map(str, range(10))) # put the result of map into a tuple
+#%%
+
+
+# reduce
+# reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)
+# accumulative effect
+from functools import reduce
+def add(x, y):
+    return x+y
+reduce(add, [1,2,3])
+#%%
+
+def product(x, y):
+    return x*y
+reduce(product, [1,2,3,4])
+#%%
+
+# normal form of names
+
+def name(x):
+    x = x.lower() #change every character into lower case
+    return x.capitalize() #capitalize the initials
+list(map(name, ['adam', 'LISA', 'barT']))
+#%%
+from functools import reduce
+def prod(x, y):
+    return x*y
+reduce(prod, [1,2,3])
+#%%
+
+################################# filter(function, list)
+
+# keep or remove the elements in list according to the return of this funciton (true or false)
+
+# keep odd numbers
+def is_odd(x):
+    return x % 2 == 1 # remainder is 1
+list(filter(is_odd, [1,2,3,4,5]))
+#%%
+
+# remove the prime between 1 and 100
+import math
+def deleteprime(x):
+    flag = 0
+    for i in range(2, int(math.sqrt(x)+1)):
+        if x % i == 0:
+            flag = 1
+    if flag == 1:
+        return x
+list(filter(deleteprime, range(1, 101)))
+#%%
+
+# remove empty element
+def not_empty(x):
+    return x and x.strip()
+# The method strip() returns a copy of the string in which all chars have been 
+# stripped from the beginning and the end of the string (default whitespace characters).
+# strip only removes the beginning and the end
+list(filter(not_empty, ['a', '', 'c']))
+#%%
+
+############################  sorted()
+
+print(sorted([1,3,5,2,-3]))
+
+print(sorted([1,3,5,2,-3], key = abs)) # sort for absolute value
+
+# descending order
+print(sorted([1,3,5,2,-3], key = abs, reverse = True))
+#%%
+
+l = ['Z', 'a', 'B']
+
+# upper case is before lower case based on ASCII
+print(sorted(l))
+
+# ignore upper case or lower case
+print(sorted(['Z', 'a', 'B'], key = str.lower))
+#%%
+
+# names and scores for 4 students
+l = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]
+
+#sorted by name
+print(sorted(l, key = lambda l2:l2[0]))
+
+# sorted by scores
+print(sorted(l, key = lambda l2:l2[1], reverse = True))
+#%%
+
+###############################################################################
+# return function
+###############################################################################
+
