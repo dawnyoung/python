@@ -283,3 +283,53 @@ print(f) # f is a function
 # decorator
 ###############################################################################
 
+# print log before execute funciton
+
+# log is a decorator 
+# log uses a function as input
+def log(function):
+    def wrapper(*args, **kw):
+        print('call %s():' % function.__name__)
+        return function(*args, **kw)
+    return wrapper
+
+@log # call log before execute now function
+def now():
+    print('5/19/2016')
+
+now()
+#%%
+
+# define the text in log
+def log(text):
+    def decorator(func):
+        def wrapper(*args, **kw):
+            print('%s %s():' % (text, func.__name__))
+            return func(*args, **kw)
+        return wrapper
+    return decorator
+
+@log('execute') # the content of log 
+def now():
+    print('2015-3-25')
+
+now()
+#%%
+
+###############################################################################
+# partial function
+###############################################################################
+
+# give a default value to a function to make a new function which does the same
+# thing but has a default parameter
+
+# This default value in this new function can be changed in the same way with the
+# original function.
+
+import functools # Import the necessary module
+
+# change a number into binary digit
+max2 = functools.partial(max, 10) # make 10 as a default input for max
+max2(1,2,4) # there are actually 4 inputs: 1,2,4,10
+#%%
+
