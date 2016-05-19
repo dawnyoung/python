@@ -54,3 +54,55 @@ def greeting(name): # public variable, which can be called from outside this mod
 
 # http://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/0014318645694388f1f10473d7f416e9291616be8367ab5000
 
+# An object includes data and function
+
+###############################################################################
+#   Class and Instance
+###############################################################################
+
+# create a class named Student
+class Student(object):
+    pass
+
+# create a instance under this class
+cart = Student()
+
+print(Student)
+print(cart)
+
+# add proporty to this instance
+cart.name = "Cart Bing"
+print(cart.name)
+#%%
+
+# create and add proporties to a class
+class Student2(object):
+    def __init__(self, name, score): # the first parameter is always self
+        self.name = name
+        self.score = score
+    def print_score(self):
+        print('%s: %s' % (self.name, self.score))
+    def get_grade(self):
+        if self.score >= 90:
+            return 'A'
+        elif self.score >= 80:
+            return 'B'
+        elif self.score >= 70:
+            return 'C'
+        else:
+            return 'D'
+
+# If the proporties are defined in the class, the parameter cannot be empty when
+# create a new instance
+cart = Student2('Cart Bing', 80)
+print('cart is ', cart)
+print('name is ', cart.name)
+print('score is ', cart.score)
+cart.print_score()
+cart.get_grade()
+#%%
+
+###############################################################################
+#  Access ristrictions
+###############################################################################
+
