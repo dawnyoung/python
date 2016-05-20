@@ -165,3 +165,33 @@ class Dog2(Animal):
 # Get information of an object
 ###############################################################################
         
+type(123) # return what class this belongs
+type(1) == type(2) #True
+type(kobe) #class: Student3
+#%%
+
+isinstance(123, int)
+isinstance('123', str)
+
+print(isinstance((1,2,3), (list, tuple))) # if it is a list or a tuple
+#%%
+
+dir(1) # return every proporty and function 
+#%%
+
+print(hasattr(kobe, 'get_name')) # Dose kobe has attribute named get_name?
+print(hasattr(kobe, 'name')) # name is private
+
+print(hasattr(kobe, 'height'))
+setattr(kobe, 'height', 6) # set a new attribute height
+print(hasattr(kobe, 'height'))
+#%%
+
+h = getattr(kobe, 'height') # give the attr of kobe to h
+h
+#%%
+
+del kobe.height # delete attr
+print(hasattr(kobe, 'height'))
+#%%
+
