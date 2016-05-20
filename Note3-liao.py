@@ -106,3 +106,62 @@ cart.get_grade()
 #  Access ristrictions
 ###############################################################################
 
+# private
+
+class Student3(object):
+    def __init__(self, name, score):
+        self.__name = name # set name as private variable
+        self.__score = score # set score as private variable
+        
+    def print_score(self):
+        print('%s: %s' % (self.__name, self.__score))
+        
+    def get_name(self):
+        return self.__name
+        
+    def get_score(self):
+        return self.__score
+        
+    def set_score(self, score):
+        self.__score = score
+        
+
+kobe = Student3('kobe', 20)
+#print(kobe.__name) # name cannot be called directly
+
+# get name and score by the defined function get_name and get_score
+print(kobe.get_name())
+print(kobe.get_score())
+
+kobe.set_score(40) # change the data
+kobe.get_score()
+#%%
+
+###############################################################################
+#   Subclass
+###############################################################################
+
+# base class, super class -> subclass
+
+class Animal(object): # base class (super class) of Dog and Cat
+    def run(self):
+        print('Animal is running')
+        
+class Dog(Animal): # Dog is subclass of animal
+    pass
+
+class Cat(Animal): # Cat is subclass of animal
+    pass
+# subclass gets every function in base class
+#%%
+
+# add function to subclass
+class Dog2(Animal):
+    def run(self):# The same function. Subclass overlaps base class
+        print('Dog is running')
+#%%
+        
+###############################################################################
+# Get information of an object
+###############################################################################
+        
