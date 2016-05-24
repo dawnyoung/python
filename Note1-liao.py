@@ -56,6 +56,17 @@ print(names4)
 print('after changing')
 names4[2][0] = 'unknown'
 print(names4)
+
+# comparison of tuples
+# the t1[0] compared with t2[0], if t1[0]> t2[0], t1 > t2
+#                                if t1[0]<t2[0], t1 < t2
+#                                if equal, compare t1[1] and t2[1]
+(0,1,3) > (0,1,2) #True
+(0,0,0) > (0,0)  # True
+(9,3,4) < (10, 7) # True
+
+# Use tuple over a list
+# For a temporary variable that you will use and discard without modefying
 #%%
 
 
