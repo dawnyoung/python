@@ -165,7 +165,7 @@ class Fib(object):
             raise StopIteration() # quit the iteration
         return self.a
     
-    def __getitem__(self, n):
+    def __getitem__(self, n): # make it possible to get the nth element in Fib
         a, b = 1, 1
         for x in range(n):
             a, b = b, a+b
@@ -176,18 +176,39 @@ for i in Fib():
 
 f = Fib()
 print(f[5])
+
+# However, slice does not work on Fib
+print(f[2:4]) # return an error
 #%%
     
 # __getitem__
 # Used for getting the nth element in Fib
 class Fib2(object):
     def __getitem__(self, n):
-        a, b = 1,1
-        for x in range(n):
-            a, b = b, a+b
-        return a
+        if isinstance(n, int):
+            a, b = 1,1
+            for x in range(n):
+                a, b = b, a+b
+            return a
+        if isinstance(n, slice):
+            start = n.start
+            stop = n.stop
+            if start is None:
+                start = 0
+            a, b = 1, 1
+            L = []
+            for x in range(stop):
+                if x >= start:
+                    L.append(a)
+                a, b = b, a+b
+            return L
+    
 
 f = Fib2()
 print(f[1])
 print(f[4])
+print(f[2:5])
 #%%
+
+# __setitem__ : give value
+# __delitem__ : delete element
