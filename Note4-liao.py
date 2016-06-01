@@ -92,3 +92,102 @@ s.width = 1024
 s.height = 768
 print(s.resolution)
 #%%
+
+###############################################################################
+#         multiple inheritance
+###############################################################################
+
+# Mixin
+
+class Animal(object):
+    pass
+
+class Mammal(Animal):
+    pass
+class Bird(Animal):
+    pass
+
+class Runnable(object):
+    def run(self):
+        print('runnint')
+class Flyable(object):
+    def fly(self):
+        print('flying')
+
+class Bat(Mammal, Flyable): # multiple inheritance
+    pass
+class Dog(Mammal, Runnable): # multiple inheritance
+    pass
+#%%
+    
+###############################################################################
+#   __XX__
+###############################################################################
+    
+# __str__
+# return a string as you like
+class Student3(object):
+    def __init__(self, name):
+        self.name = name
+    def __str__(self):
+        return 'Student object (name: %s)' % self.name
+
+print(Student3('kobe'))
+Student3('kobe') # return <__main__.Student3 at 0x78f7990>
+# because without print, it uses __repr__
+# to solve this problem, define a __repr__
+#%%
+
+class Student4(object):
+    def __init__(self, name):
+        self.name = name
+    def __str__(self):
+        return 'student object(name: %s)' % self.name
+    __repr__ = __str__
+    # generally, __repr__ is the same with __str__
+
+Student4('kobe')
+#%%
+
+# __iter__
+# Fib works like a list, which can be used for iteration
+# However, we cannot get the nth 'element' in Fib
+class Fib(object):
+    def __init__(self):
+        self.a, self.b = 0, 1 # initialization
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        self.a, self.b = self.b, self.a+self.b # calculate the next value
+        if self.a > 100: # when to quit
+            raise StopIteration() # quit the iteration
+        return self.a
+    
+    def __getitem__(self, n):
+        a, b = 1, 1
+        for x in range(n):
+            a, b = b, a+b
+        return a
+
+for i in Fib():
+    print(i)
+
+f = Fib()
+print(f[5])
+#%%
+    
+# __getitem__
+# Used for getting the nth element in Fib
+class Fib2(object):
+    def __getitem__(self, n):
+        a, b = 1,1
+        for x in range(n):
+            a, b = b, a+b
+        return a
+
+f = Fib2()
+print(f[1])
+print(f[4])
+#%%
