@@ -212,3 +212,190 @@ print(f[2:5])
 
 # __setitem__ : give value
 # __delitem__ : delete element
+
+# __getattr__
+class Student4(object):
+    def __init__(self):
+        self.name = 'kobe'
+    def __getattr__(self, attr):
+        if attr == 'score': # when there is no attribute called 'score'
+            return 81 # return a number
+        if attr == 'age':
+            return lambda: 38 # return a function
+
+s = Student4()
+print(s.score)
+print(s.age())
+print(s.a) # return none by default
+
+# If we did not define __getattr__, when calling an attr that does not exist, 
+# an error will be returned.
+#%%
+
+class Student5(object):
+    def __getattr__(self, attr):
+        if attr == 'score':
+            return 81
+        raise AttributeError('\'Student5\' object has no attribute \'%s\'' % attr)
+        # define error returned if the attr dose not exist
+
+s = Student5()
+print(s.score)
+print(s.a)
+#%%
+
+callable(s) # s is an instance of Student5. it is not callable
+s() # return an error
+#%%
+
+# __call__
+
+class Student6(object):
+    def __init__(self, name):
+        self.name = name
+    def __call__(self):
+        print('my name is %s' % self.name)
+
+s2 = Student6('kobe')
+print(callable(s2))
+s2() # s2 is an instance of Student6. It is callable
+#%%
+
+###############################################################################
+# Enum
+###############################################################################
+
+from enum import Enum
+
+# give a constant value to each month
+Month = Enum('Month', ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', \
+             'Sep', 'Oct', 'Nov', 'Dec'))
+
+for name, member in Month.__members__.items():
+    print(name, '->', member, ',', member.value)
+#%%
+
+# give a constant value to each day
+from enum import Enum, unique
+@unique # make sure there is no replicated value
+class Weekday(Enum):
+    Sun = 0
+    Mon = 1
+    Tue = 2
+    Wed = 3
+    Thu = 4
+    Fri = 5
+    Sat = 6
+
+print(Weekday.Fri)
+print(Weekday['Fri'])
+print(Weekday.Fri.value)
+print(Weekday(5))
+for name, member in Weekday.__members__.items():
+    print(name, '->', member, member.value)
+#%%
+    
+###############################################################################
+# type()
+###############################################################################
+    
+print(type(s))
+# type() returns the type of an object, or creates a new type.
+
+def fn(self, name = 'world'): # define a function
+    print('hello, %s' % name)
+
+# create Hello class
+Hello = type('Hello', (object,),  dict(hello = fn)) 
+# type(name of class, base class, combine the class and the function)
+# name of class
+# parent class: a tuple
+# combine the class and the function
+
+h = Hello()
+print(type(h))
+#%%
+
+###############################################################################
+#   metaclass
+###############################################################################
+
+# define metaclass -> create class -> create instance
+
+# object relational mapping
+
+' Simple ORM using metaclass '
+
+class Field(object):
+
+    def __init__(self, name, column_type):
+        self.name = name
+        self.column_type = column_type
+
+    def __str__(self):
+        return '<%s:%s>' % (self.__class__.__name__, self.name)
+
+class StringField(Field):
+
+    def __init__(self, name):
+        super(StringField, self).__init__(name, 'varchar(100)')
+
+class IntegerField(Field):
+
+    def __init__(self, name):
+        super(IntegerField, self).__init__(name, 'bigint')
+
+class ModelMetaclass(type):
+
+    def __new__(cls, name, bases, attrs):
+        if name=='Model':
+            return type.__new__(cls, name, bases, attrs)
+        print('Found model: %s' % name)
+        mappings = dict()
+        for k, v in attrs.items():
+            if isinstance(v, Field):
+                print('Found mapping: %s ==> %s' % (k, v))
+                mappings[k] = v
+        for k in mappings.keys():
+            attrs.pop(k)
+        attrs['__mappings__'] = mappings # 保存属性和列的映射关系
+        attrs['__table__'] = name # 假设表名和类名一致
+        return type.__new__(cls, name, bases, attrs)
+
+class Model(dict, metaclass=ModelMetaclass):
+
+    def __init__(self, **kw):
+        super(Model, self).__init__(**kw)
+
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(r"'Model' object has no attribute '%s'" % key)
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
+    def save(self):
+        fields = []
+        params = []
+        args = []
+        for k, v in self.__mappings__.items():
+            fields.append(v.name)
+            params.append('?')
+            args.append(getattr(self, k, None))
+        sql = 'insert into %s (%s) values (%s)' % (self.__table__, ','.join(fields), ','.join(params))
+        print('SQL: %s' % sql)
+        print('ARGS: %s' % str(args))
+
+# testing code:
+
+class User(Model):
+    id = IntegerField('id')
+    name = StringField('username')
+    email = StringField('email')
+    password = StringField('password')
+
+u = User(id=12345, name='Michael', email='test@orm.org', password='my-pwd')
+u.save()
+#%%
