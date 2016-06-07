@@ -33,7 +33,8 @@ class TestDict(unittest.TestCase): # base class: unittest.TestCase
         d = dict()
         with self.assertRaises(AttributeError):
             value = d.empty
-        def setUp(self): # excute before each unit
+            
+    def setUp(self): # excute before each unit
         print('before excuting the unit')
     def tearDown(self): # excute after each unit
         print('after excuting the unit')
